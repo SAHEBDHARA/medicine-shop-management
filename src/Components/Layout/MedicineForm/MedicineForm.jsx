@@ -1,28 +1,41 @@
 import React, { useState } from 'react';
-import './MedicineForm.css'; // Import your CSS file
+import './MedicineForm.css';
+import { useNavigate } from 'react-router-dom';
+import { useMedicineFormContext } from '../../../Context/MedicineCnotext';
 
 const MedicineForm = () => {
-  const [medicineName, setMedicineName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [availableQuantity, setAvailableQuantity] = useState('');
+  const { medicineFormData, setMedicineFormData } = useMedicineFormContext();
+
+  const navigate = useNavigate();
+
+  // Initialize the local state to manage form inputs
+  const [medicineInputs, setMedicineInputs] = useState({
+    medicineName: '',
+    description: '',
+    price: '',
+    availableQuantity: '',
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-  
-    console.log({
-      medicineName,
-      description,
-      price,
-      availableQuantity,
+    const newMedicine = {
+      medicineName: medicineInputs.medicineName,
+      description: medicineInputs.description,
+      price: medicineInputs.price,
+      availableQuantity: medicineInputs.availableQuantity,
+    };
+    setMedicineFormData([...medicineFormData, newMedicine]);
+   
+    setMedicineInputs({
+      medicineName: '',
+      description: '',
+      price: '',
+      availableQuantity: '',
     });
 
-    // Clear form fields after submission
-    setMedicineName('');
-    setDescription('');
-    setPrice('');
-    setAvailableQuantity('');
+    // Navigate to the desired page
+    navigate('/');
   };
 
   return (
@@ -33,16 +46,26 @@ const MedicineForm = () => {
           <label>Medicine Name:</label>
           <input
             type="text"
-            value={medicineName}
-            onChange={(e) => setMedicineName(e.target.value)}
+            value={medicineInputs.medicineName}
+            onChange={(e) =>
+              setMedicineInputs({
+                ...medicineInputs,
+                medicineName: e.target.value,
+              })
+            }
             required
           />
         </div>
         <div className="form-group">
           <label>Description:</label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={medicineInputs.description}
+            onChange={(e) =>
+              setMedicineInputs({
+                ...medicineInputs,
+                description: e.target.value,
+              })
+            }
             required
           />
         </div>
@@ -50,8 +73,13 @@ const MedicineForm = () => {
           <label>Price:</label>
           <input
             type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={medicineInputs.price}
+            onChange={(e) =>
+              setMedicineInputs({
+                ...medicineInputs,
+                price: e.target.value,
+              })
+            }
             required
           />
         </div>
@@ -59,8 +87,13 @@ const MedicineForm = () => {
           <label>Available Quantity:</label>
           <input
             type="number"
-            value={availableQuantity}
-            onChange={(e) => setAvailableQuantity(e.target.value)}
+            value={medicineInputs.availableQuantity}
+            onChange={(e) =>
+              setMedicineInputs({
+                ...medicineInputs,
+                availableQuantity: e.target.value,
+              })
+            }
             required
           />
         </div>
